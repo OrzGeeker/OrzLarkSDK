@@ -146,6 +146,73 @@ final class OrzLarkSDKTests: XCTestCase {
         
         XCTAssertTrue(ret)
     }
+    
+    let interactiveMessage = Message.make.interactive(
+        header: .init(title: .init(tag: .plainText, content: "今日旅游推荐")),
+        elements: [
+            .init(
+                tag: .div,
+                text: .init(tag: .larkMarkdown, content: "**西湖**，位于浙江省杭州市西湖区龙井路1号，杭州市区西部，景区总面积49平方千米，汇水面积为21.22平方千米，湖面面积为6.38平方千米。")
+            ),
+            .init(tag: .action, actions: [
+                .init(tag: .button, text: .init(tag: .larkMarkdown, content: "更多景点介绍 :玫瑰:"), url: "http://www.baidu.com", type: .default, value: [String : String]())
+            ])
+        ]
+    )
+    
+    func testInteractiveMessageEncodable() throws {
+        
+        let ret = try interactiveMessage.formattedJson
+        
+        print(ret!)
+        
+        XCTAssertEqual(ret, """
+        {
+          "card" : {
+            "elements" : [
+              {
+                "tag" : "div",
+                "text" : {
+                  "content" : "**西湖**，位于浙江省杭州市西湖区龙井路1号，杭州市区西部，景区总面积49平方千米，汇水面积为21.22平方千米，湖面面积为6.38平方千米。",
+                  "tag" : "lark_md"
+                }
+              },
+              {
+                "actions" : [
+                  {
+                    "tag" : "button",
+                    "text" : {
+                      "content" : "更多景点介绍 :玫瑰:",
+                      "tag" : "lark_md"
+                    },
+                    "type" : "default",
+                    "url" : "http:\\/\\/www.baidu.com",
+                    "value" : {
+
+                    }
+                  }
+                ],
+                "tag" : "action"
+              }
+            ],
+            "header" : {
+              "title" : {
+                "content" : "今日旅游推荐",
+                "tag" : "plain_text"
+              }
+            }
+          },
+          "msg_type" : "interactive"
+        }
+        """)
+    }
+    
+    func testSendInteractiveMessage() async throws {
+        
+        let ret = try await interactiveMessage.sendToLark
+        
+        XCTAssertTrue(ret)
+    }
 }
 
 /// 自定义机器人发送消息到群:

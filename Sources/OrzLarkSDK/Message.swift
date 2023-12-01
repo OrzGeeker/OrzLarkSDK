@@ -63,27 +63,15 @@ final class Message: Codable {
         var imageKey: String?
     }
     
-    var content: Content = .init(text: nil)
+    var content: Content?
     
     enum CodingKeys: String, CodingKey {
         case type = "msg_type"
         case content
+        case card
     }
     
     struct Card: Codable {
-        
-        struct Element: Codable {
-            
-            enum Tag: String, Codable {
-                case div
-            }
-            
-            let tag: Tag
-            
-            let text: String
-        }
-        
-        var elements: [Element]
         
         struct Header: Codable {
             
@@ -102,6 +90,47 @@ final class Message: Codable {
         }
         
         var header: Header
+        
+        struct Element: Codable {
+            
+            enum Tag: String, Codable {
+                case div
+                case larkMarkdown = "lark_md"
+                case button
+                case action
+            }
+            
+            let tag: Tag
+            
+            struct Text: Codable {
+                let tag: Tag
+                let content: String
+            }
+            
+            var text: Text?
+            
+            struct Action: Codable {
+                
+                let tag: Tag
+                
+                let text: Text
+                
+                let url: String
+                
+                enum `Type`: String, Codable {
+                    case `default`
+                }
+                
+                let type: Type
+                
+                let value: [String: String]
+            }
+            
+            var actions: [Action]?
+        }
+        
+        var elements: [Element]
+
     }
     
     var card: Card?
@@ -143,8 +172,9 @@ extension Message {
         return self
     }
     
-    func interactive() -> Self {
+    func interactive(header: Card.Header, elements: [Card.Element]) -> Self {
         self.type = .interactive
+        self.card = .init(header: header, elements: elements)
         return self
     }
 }
