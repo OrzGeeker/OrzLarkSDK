@@ -7,9 +7,10 @@
 
 import Foundation
 
-struct Message: Codable {
+final class Message: Codable {
     
     enum `Type`: String, Codable {
+        case unknown
         case text
         case post
         case image
@@ -17,19 +18,38 @@ struct Message: Codable {
         case interactive
     }
     
-    let type: `Type`
+    var type: `Type` = .unknown
     
     struct Content: Codable {
         
-        let text: String
+        var text: String
     }
     
-    let content: Content
+    var content: Content = .init(text: "")
     
     
     enum CodingKeys: String, CodingKey {
         case type = "msg_type"
         case content
+    }
+}
+
+extension Message {
+    
+    static var make: Message {
+       Message()
+    }
+    
+    func text(_ text: String) -> Self {
+        self.type = .text
+        self.content.text = text
+        return self
+    }
+    
+    func text(at userId: String) -> Self {
+        self.type = .text
+        self.content.text = "<at user_id=\"\(userId)\"></at>"
+        return self
     }
 }
 
