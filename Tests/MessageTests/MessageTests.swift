@@ -1,12 +1,12 @@
 import XCTest
-@testable import OrzLarkSDK
+@testable import Message
 
 // XCTest Documentation
 // https://developer.apple.com/documentation/xctest
 
 // Defining Test Cases and Test Methods
 // https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
-final class OrzLarkSDKTests: XCTestCase {
+final class MessageTests: XCTestCase {
     
     static let userId = "ou_be45bb011eaaf304c1fa6a94242179b6"
     
@@ -101,7 +101,7 @@ final class OrzLarkSDKTests: XCTestCase {
         XCTAssertTrue(ret)
     }
     
-    let shareChatMessage = Message.make.shareChat("oc_aa03b42c452ed330f6dafbdcd2fc92e7")
+    let shareChatMessage = Message.make.shareChat("oc_a7242f723967fed68d86a57771ecc8bb")
     
     func testShareChatMessageEncodable() throws {
         
@@ -110,7 +110,7 @@ final class OrzLarkSDKTests: XCTestCase {
         XCTAssertEqual(ret, """
         {
           "content" : {
-            "share_chat_id" : "oc_aa03b42c452ed330f6dafbdcd2fc92e7"
+            "share_chat_id" : "oc_a7242f723967fed68d86a57771ecc8bb"
           },
           "msg_type" : "share_chat"
         }
@@ -223,7 +223,7 @@ final class OrzLarkSDKTests: XCTestCase {
 ///
 extension Message {
     
-    static let testWebhook = "https://open.feishu.cn/open-apis/bot/v2/hook/993294fd-10b1-4385-8a37-053ac5f7bc67"
+    static let testWebhook = "https://open.feishu.cn/open-apis/bot/v2/hook/37930747-46b7-4b47-af70-8f64b0a4e9b8"
     
     var sendToLark: Bool {
 
