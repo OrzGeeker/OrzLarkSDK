@@ -19,7 +19,7 @@ extension Message {
         return jsonEncoder
     }()
     
-    var formattedJson: String? {
+    public var formattedJson: String? {
         
         get throws {
             

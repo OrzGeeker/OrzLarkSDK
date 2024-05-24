@@ -1,6 +1,6 @@
 //
 //  Message.swift
-//  
+//
 //
 //  Created by joker on 11/30/23.
 //
@@ -9,14 +9,14 @@
 
 import Foundation
 
-final class Message: Codable {
-    
+public final class Message: Codable {
+
     var type: `Type` = .unknown
-    
+
     var content: Content?
-    
+
     var card: Card?
-    
+
     enum CodingKeys: String, CodingKey {
         case type = "msg_type"
         case content

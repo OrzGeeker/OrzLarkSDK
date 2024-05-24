@@ -1,70 +1,97 @@
 //
 //  Message+Card.swift
-//  
+//
 //
 //  Created by joker on 2023/12/1.
 //
 
 import Foundation
 
-struct Card: Codable {
+public struct Card: Codable {
     
-    struct Header: Codable {
+    public struct Header: Codable {
         
-        struct Title: Codable {
+        public struct Title: Codable {
             
-            enum Tag: String, Codable {
+            public enum Tag: String, Codable {
                 case plainText = "plain_text"
             }
             
-            let tag: Tag
+            public let tag: Tag
             
-            let content: String
+            public let content: String
+            
+            public init(tag: Tag, content: String) {
+                self.tag = tag
+                self.content = content
+            }
         }
         
-        let title: Title
+        public let title: Title
+        
+        public init(title: Title) {
+            self.title = title
+        }
     }
     
     var header: Header
     
-    struct Element: Codable {
+    public struct Element: Codable {
         
-        enum Tag: String, Codable {
+        public enum Tag: String, Codable {
             case div
             case larkMarkdown = "lark_md"
             case button
             case action
         }
         
-        let tag: Tag
+        public let tag: Tag
         
-        struct Text: Codable {
-            let tag: Tag
-            let content: String
+        public struct Text: Codable {
+            public let tag: Tag
+            public let content: String
+            public init(tag: Tag, content: String) {
+                self.tag = tag
+                self.content = content
+            }
         }
         
-        var text: Text?
+        public var text: Text?
         
-        struct Action: Codable {
+        public struct Action: Codable {
             
-            let tag: Tag
+            public let tag: Tag
             
-            let text: Text
+            public let text: Text
             
-            let url: String
+            public let url: String
             
-            enum `Type`: String, Codable {
+            public enum `Type`: String, Codable {
                 case `default`
             }
             
-            let type: Type
+            public let type: `Type`
             
-            let value: [String: String]
+            public let value: [String: String]
+            
+            public init(tag: Tag, text: Text, url: String, type: Type, value: [String : String]) {
+                self.tag = tag
+                self.text = text
+                self.url = url
+                self.type = type
+                self.value = value
+            }
         }
         
-        var actions: [Action]?
+        public var actions: [Action]?
+        
+        public init(tag: Tag, text: Text? = nil, actions: [Action]? = nil) {
+            self.tag = tag
+            self.text = text
+            self.actions = actions
+        }
     }
     
     var elements: [Element]
-
+    
 }

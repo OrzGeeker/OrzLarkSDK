@@ -5,7 +5,7 @@
 //  Created by joker on 2023/12/1.
 //
 
-extension Message {
+public extension Message {
     
     static var make: Message {
        Message()

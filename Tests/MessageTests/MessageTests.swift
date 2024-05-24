@@ -1,5 +1,5 @@
 import XCTest
-@testable import Message
+import Message
 
 // XCTest Documentation
 // https://developer.apple.com/documentation/xctest
@@ -34,8 +34,7 @@ final class MessageTests: XCTestCase {
         
         XCTAssertTrue(ret)
     }
-    
-    
+
     func testSendTextAtAllMessage() async throws {
         
         let ret = try await textAtAllMessage.sendToLark
@@ -49,8 +48,7 @@ final class MessageTests: XCTestCase {
         
         XCTAssertTrue(ret)
     }
-    
-    
+
     let postMessage = Message.make.post(cnBody: .init(title: "test post", content: [
         [
             .init(tag: .text, text: "text post"),
@@ -222,9 +220,11 @@ final class MessageTests: XCTestCase {
 ///     https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot#%E6%94%AF%E6%8C%81%E5%8F%91%E9%80%81%E7%9A%84%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B%E8%AF%B4%E6%98%8E)
 ///
 extension Message {
-    
-    static let testWebhook = "https://open.feishu.cn/open-apis/bot/v2/hook/37930747-46b7-4b47-af70-8f64b0a4e9b8"
-    
+
+    static let yourLarkGroupCustomBotWebhookUrl = "https://open.feishu.cn/open-apis/bot/v2/hook/37930747-46b7-4b47-af70-8f64b0a4e9b8"
+
+    static let testWebhook = ProcessInfo.processInfo.environment["WEBHOOK"] ?? yourLarkGroupCustomBotWebhookUrl
+
     var sendToLark: Bool {
 
         get async throws { try await self.sendToLark(with: Self.testWebhook) }
