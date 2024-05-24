@@ -44,4 +44,4 @@ import Message
 try await Message.make.text("text message content").sendToLark(with: "<your_lark_group_custom_bot_webhook_url>")
 ```
 
-- send other type message can reference: [unit tests]()
+- send other type message can reference: [unit tests](https://github.com/OrzGeeker/OrzLarkSDK/blob/main/Tests/MessageTests/MessageTests.swift)
