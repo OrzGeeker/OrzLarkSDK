@@ -162,8 +162,6 @@ final class MessageTests: XCTestCase {
         
         let ret = try interactiveMessage.formattedJson
         
-        print(ret!)
-        
         XCTAssertEqual(ret, """
         {
           "card" : {
