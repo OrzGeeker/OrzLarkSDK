@@ -1,11 +1,11 @@
 # OrzLarkSDK
 
-Lark SDK write by swift programming language
+Lark SDK write in Swift programming language
 
 
 ## Feature
 
-- send message to Lark Group with a webhook which fetched from the custom bot that been added into Lark Group
+- Send message to Lark Group with a webhook which fetched from the custom bot that been added into Lark Group
 
 - [support message type][message type]:
     
@@ -49,6 +49,6 @@ try await Message.make.text("text message content").sendToLark(with: "<your_lark
 
 # Development Lark Chat
 
-![Lark Chat](./images/OrzLarkSDK.png)
+![Lark Chat](/images/OrzLarkSDK.png)
 
 - webhook：https://open.feishu.cn/open-apis/bot/v2/hook/b313848b-2497-4db6-b229-ecef61181e39
