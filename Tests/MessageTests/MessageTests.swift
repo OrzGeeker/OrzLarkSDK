@@ -221,7 +221,7 @@ final class MessageTests: XCTestCase {
 ///
 extension Message {
 
-    static let yourLarkGroupCustomBotWebhookUrl = "https://open.feishu.cn/open-apis/bot/v2/hook/37930747-46b7-4b47-af70-8f64b0a4e9b8"
+    static let yourLarkGroupCustomBotWebhookUrl = "https://open.feishu.cn/open-apis/bot/v2/hook/b313848b-2497-4db6-b229-ecef61181e39"
 
     static let testWebhook = ProcessInfo.processInfo.environment["WEBHOOK"] ?? yourLarkGroupCustomBotWebhookUrl
 
