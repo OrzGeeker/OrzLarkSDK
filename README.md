@@ -2,6 +2,7 @@
 
 Lark SDK write in Swift programming language
 
+[Lark Open Platform](https://open.feishu.cn/document)
 
 ## Feature
 
