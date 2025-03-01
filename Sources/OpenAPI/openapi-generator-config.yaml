@@ -2,3 +2,6 @@ generate:
   - types
   - client
 namingStrategy: idiomatic
+accessModifier: public
+# Example Of Swift OpenAPI Generator:
+# https://github.com/apple/swift-openapi-generator/blob/main/Examples/README.md
