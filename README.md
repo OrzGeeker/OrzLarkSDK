@@ -49,6 +49,8 @@ try await Message.make.text("text message content").sendToLark(with: "<your_lark
 
 # Development Lark Chat
 
-![Lark Chat](/images/OrzLarkSDK.png)
+The Test Lark Chat Bot Webhook is:
 
-- webhook：https://open.feishu.cn/open-apis/bot/v2/hook/b313848b-2497-4db6-b229-ecef61181e39
+https://open.feishu.cn/open-apis/bot/v2/hook/b313848b-2497-4db6-b229-ecef61181e39
+
+![Lark Chat](/images/OrzLarkSDK.png)
