@@ -1,0 +1,7 @@
+# Swagger Editor Next: https://editor-next.swagger.io/
+# Open Lark: https://open.feishu.cn/
+openapi: 3.1.0
+info:
+  title: Swagger Petstore - OpenAPI 3.1
+  version: 1.0.11
+paths:
