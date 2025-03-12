@@ -1,7 +1,103 @@
 # Swagger Editor Next: https://editor-next.swagger.io/
-# Open Lark: https://open.feishu.cn/
-openapi: 3.1.0
+# OpenAPI Map: https://openapi-map.apihandyman.io/
+# Open Lark: https://open.feishu.cn/document
+openapi: 3.0.0
 info:
-  title: Lark Open Service - OpenAPI 3.1
+  title: 飞书开放能力
   version: 0.0.1
+  description: |-
+    收集飞书开放平台上的API能力, 并转换成OpenAPI的格式,
+    方便转换成各种编程语言对应的SDK使用
+  contact:
+    email: 824219521@qq.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: 多维表格
+    description: '**`46 API`**'
+    externalDocs:
+      url: >-
+        https://open.larkoffice.com/document/server-docs/docs/bitable-v1/bitable-overview
+      description: API概述
+externalDocs:
+  description: 开发文档 - 飞书开放平台
+  url: https://open.feishu.cn/document
+servers:
+  - url: https://open.feishu.cn/open-apis
+    description: 飞书官方地址
 paths:
+  /bitable/v1/apps:
+    post:
+      tags:
+        - 多维表格
+      summary: 在指定文件夹中创建一个多维表格, 包含一个空白的数据表。
+      description: |-
+        - 接口频率限制: **20次/分钟**
+        - 支持的应用类型: **自建应用**/**商店应用**
+        - 权限要求(开启任一权限即可):
+          - 创建多维表格
+          - 查看、评论、编辑和管理多维表格
+      externalDocs:
+        url: >-
+          https://open.larkoffice.com/document/server-docs/docs/bitable-v1/app/create
+      operationId: createBitTable
+      security:
+        - http_bearer: []
+      requestBody:
+        $ref: '#/components/requestBodies/createBitTable'
+      responses:
+        '200':
+          $ref: '#/components/responses/createBitTableSuccess'
+components:
+  securitySchemes:
+    http_bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |-
+        应用调用 API 时, 需要通过访问凭证(access_token)进行身份鉴权, 不同类型的访问凭证可获取的数据范围不同
+        ["Bearer <access_token>"]
+  requestBodies:
+    createBitTable:
+      description: 请求体
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/createBitTable'
+  responses:
+    createBitTableSuccess:
+      description: 请求成功
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: 错误码，非 0 表示失败
+              msg:
+                type: string
+                description: 错误描述
+              data:
+                type: object
+  schemas:
+    createBitTable:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 一篇新的多维表格
+          description: 多维表格 App 名称。最长为 255 个字符。
+        folder_token:
+          type: string
+          example:
+            - fldcnqquW1svRIYVT2Np6Iabcef
+          description: 多维表格 App 归属文件夹。默认为空, 表示多维表格将被创建在云空间根目录。请确保调用身份拥有在该文件夹中的编辑权限。
+        time_zone:
+          type: string
+          example: Asia/Macau
+          description: >-
+            文档时区, 详情参考:
+            [文档时区介绍](https://bytedance.larkoffice.com/docx/YKRndTM7VoyDqpxqqeEcd67MnEf)
