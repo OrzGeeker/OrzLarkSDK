@@ -49,6 +49,34 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/createBitTableSuccess'
+  /bitable/v1/apps/{app_token}:
+    get:
+      tags:
+        - 多维表格
+      summary: 获取指定多维表格的元数据信息，包括多维表格名称、多维表格版本号、多维表格是否开启高级权限等。
+      description: |-
+        - 接口频率限制: **20次/分钟**
+        - 支持的应用类型: **自建应用**/**商店应用**
+        - 权限要求(开启任一权限即可):
+          - 获取多维表格信息
+          - 查看、评论、编辑和管理多维表格
+          - 查看、评论和导出多维表格
+      externalDocs:
+        url: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get
+      operationId: getBitTableMetaData
+      security:
+        - http_bearer: []
+      parameters:
+        - name: app_token
+          description: 多维表格 App 的唯一标识
+          in: path
+          required: true
+          schema:
+            type: string
+            example: appbcbWCzen6D8dezhoCH2RpMAh
+      responses:
+        '200':
+          $ref: '#/components/responses/createBitTableSuccess'
 components:
   securitySchemes:
     http_bearer:
