@@ -76,7 +76,7 @@ paths:
             example: appbcbWCzen6D8dezhoCH2RpMAh
       responses:
         '200':
-          $ref: '#/components/responses/createBitTableSuccess'
+          $ref: '#/components/responses/getBitTableMetaData'
 components:
   securitySchemes:
     http_bearer:
@@ -93,8 +93,23 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/createBitTable'
+            $ref: '#/components/schemas/CreateBitTable'
   responses:
+    getBitTableMetaData:
+      description: 请求成功
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: 错误码，非 0 表示失败
+              msg:
+                type: string
+                description: 错误描述
+              data:
+                $ref: '#/components/schemas/ResponseData'
     createBitTableSuccess:
       description: 请求成功
       content:
@@ -111,7 +126,47 @@ components:
               data:
                 type: object
   schemas:
-    createBitTable:
+    ResponseData:
+      type: object
+      properties:
+        app:
+          $ref: '#/components/schemas/BitTableMetaData'
+    BitTableMetaData:
+      type: object
+      properties:
+        app_token:
+          type: string
+          description: 多维表格的唯一标识 app_token
+        name:
+          type: string
+          description: 多维表格的名称
+        revision:
+          type: integer
+          description: 多维表格的版本号。对多维表格进行修改时更新，如新增、删除数据表，修改数据表名等，初始为 1，每次更新+1
+        is_advanced:
+          type: boolean
+          description: |-
+            多维表格是否开启了高级权限。取值包括：
+            true - 开启了高级权限
+            false - 关闭了高级权限
+        time_zone:
+          $ref: '#/components/schemas/timeZone'
+        formula_type:
+          type: integer
+          description: |-
+            多维表格的公式字段类型
+            1 - 不支持指定公式字段类型
+            2 - 支持指定公式字段类型
+          enum:
+            - 1
+            - 2
+        advance_version:
+          type: string
+          description: 文档高级权限版本
+          enum:
+            - v1
+            - v2
+    CreateBitTable:
       type: object
       properties:
         name:
