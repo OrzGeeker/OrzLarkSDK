@@ -26,6 +26,8 @@ externalDocs:
 servers:
   - url: https://open.feishu.cn/open-apis
     description: 飞书官方地址
+security:
+  - http_bearer: []
 paths:
   /bitable/v1/apps:
     post:
@@ -41,15 +43,36 @@ paths:
       externalDocs:
         url: >-
           https://open.larkoffice.com/document/server-docs/docs/bitable-v1/app/create
-      operationId: createBitTable
-      security:
-        - http_bearer: []
+      operationId: createBitTableReqBody
       requestBody:
-        $ref: '#/components/requestBodies/createBitTable'
+        $ref: '#/components/requestBodies/createBitTableReqBody'
       responses:
         '200':
-          $ref: '#/components/responses/createBitTableSuccess'
+          $ref: '#/components/responses/CreateOrCopyBitTableResponseTemp'
+  /bitable/v1/apps/{app_token}/copy:
+    parameters:
+      - $ref: '#/components/parameters/app_token'
+    post:
+      tags:
+        - 多维表格
+      summary: 复制一个多维表格，可以指定复制到某个有权限的文件夹下
+      description: |-
+        - 接口频率限制: **20次/分钟**
+        - 支持的应用类型: **自建应用**/**商店应用**
+        - 权限要求(开启任一权限即可):
+          - 复制多维表格
+          - 查看、评论、编辑和管理多维表格
+      externalDocs:
+        url: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/copy
+      operationId: copyBitTableReqBody
+      requestBody:
+        $ref: '#/components/requestBodies/copyBitTableReqBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateOrCopyBitTableResponseTemp'
   /bitable/v1/apps/{app_token}:
+    parameters:
+      - $ref: '#/components/parameters/app_token'
     get:
       tags:
         - 多维表格
@@ -64,20 +87,37 @@ paths:
       externalDocs:
         url: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get
       operationId: getBitTableMetaData
-      security:
-        - http_bearer: []
-      parameters:
-        - name: app_token
-          description: 多维表格 App 的唯一标识
-          in: path
-          required: true
-          schema:
-            type: string
-            example: appbcbWCzen6D8dezhoCH2RpMAh
       responses:
         '200':
-          $ref: '#/components/responses/getBitTableMetaData'
+          $ref: '#/components/responses/Response'
+    put:
+      tags:
+        - 多维表格
+      summary: 更新多维表格元数据，包括多维表格的名称、是否开启高级权限。
+      description: |-
+        - 接口频率限制: **20次/分钟**
+        - 支持的应用类型: **自建应用**/**商店应用**
+        - 权限要求(开启任一权限即可):
+          - 更新多维表格信息
+          - 查看、评论、管理多维表格
+      externalDocs:
+        url: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/update
+      operationId: updateBitTableMetaDataReqBody
+      requestBody:
+        $ref: '#/components/requestBodies/updateBitTableMetaDataReqBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
 components:
+  parameters:
+    app_token:
+      name: app_token
+      description: 多维表格 App 的唯一标识
+      in: path
+      required: true
+      schema:
+        type: string
+        example: appbcbWCzen6D8dezhoCH2RpMAh
   securitySchemes:
     http_bearer:
       type: http
@@ -87,16 +127,30 @@ components:
         应用调用 API 时, 需要通过访问凭证(access_token)进行身份鉴权, 不同类型的访问凭证可获取的数据范围不同
         ["Bearer <access_token>"]  
   requestBodies:
-    createBitTable:
-      description: 请求体
+    createBitTableReqBody:
+      description: 创建多维表格请求体
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/CreateBitTable'
+            $ref: '#/components/schemas/CreateBitTableSchema'
+    copyBitTableReqBody:
+      description: 复制多维表格
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CopyBitTableSchema'
+    updateBitTableMetaDataReqBody:
+      description: 更新多维表格元数据请求体
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateBitTableMetaDataSchema'
   responses:
-    getBitTableMetaData:
-      description: 请求成功
+    Response:
+      description: 接口响应
       content:
         application/json:
           schema:
@@ -109,8 +163,8 @@ components:
                 type: string
                 description: 错误描述
               data:
-                $ref: '#/components/schemas/ResponseData'
-    createBitTableSuccess:
+                $ref: '#/components/schemas/ResponseDataSchema'
+    CreateOrCopyBitTableResponseTemp:
       description: 请求成功
       content:
         application/json:
@@ -126,12 +180,34 @@ components:
               data:
                 type: object
   schemas:
-    ResponseData:
+    ResponseDataSchema:
       type: object
       properties:
         app:
-          $ref: '#/components/schemas/BitTableMetaData'
-    BitTableMetaData:
+          $ref: '#/components/schemas/BitTableMetaDataSchema'
+    CreateBitTableSchema:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/AppName'
+        folder_token:
+          $ref: '#/components/schemas/FolderToken'
+        time_zone:
+          $ref: '#/components/schemas/TimeZone'
+    CopyBitTableSchema:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/AppName'
+        folder_token:
+          $ref: '#/components/schemas/FolderToken'
+        time_zone:
+          $ref: '#/components/schemas/TimeZone'
+        without_content:
+          type: boolean
+          description: 是否复制多维表格中的内容，默认 false，即复制多维表格中的内容。
+          default: false
+    BitTableMetaDataSchema:
       type: object
       properties:
         app_token:
@@ -150,7 +226,7 @@ components:
             true - 开启了高级权限
             false - 关闭了高级权限
         time_zone:
-          $ref: '#/components/schemas/timeZone'
+          $ref: '#/components/schemas/TimeZone'
         formula_type:
           type: integer
           description: |-
@@ -166,30 +242,39 @@ components:
           enum:
             - v1
             - v2
-    CreateBitTable:
+    UpdateBitTableMetaDataSchema:
       type: object
       properties:
         name:
           type: string
-          description: 多维表格 App 名称。最长为 255 个字符。
-          example: 一篇新的多维表格
-        folder_token:
-          type: string
-          description: >-
-            多维表格 App 归属文件夹。默认为空，表示多维表格将被创建在云空间根目录。请确保调用身份拥有在该文件夹中的编辑权限。
+          description: 多维表格的名称
+          example: 更新的多维表格名称
+        is_advanced:
+          type: boolean
+          description: |-
+            多维表格是否开启了高级权限。取值包括：
+            true - 开启了高级权限
+            false - 关闭了高级权限   
+          example: false
+    AppName:
+      type: string
+      description: 多维表格 App 名称。最长为 255 个字符。
+      example: 一篇新的多维表格
+    FolderToken:
+      type: string
+      description: >-
+        多维表格 App 归属文件夹。默认为空，表示多维表格将被创建在云空间根目录。请确保调用身份拥有在该文件夹中的编辑权限。
 
 
-            了解如何获取文件夹 Token。参考[如何获取云文档资源相关
-            Token](https://open.feishu.cn/document/ukTMukTMukTM/uczNzUjL3czM14yN3MTN#08bb5df6)。
+        了解如何获取文件夹 Token。参考[如何获取云文档资源相关
+        Token](https://open.feishu.cn/document/ukTMukTMukTM/uczNzUjL3czM14yN3MTN#08bb5df6)。
 
 
-            若应用使用的是 tenant_access_token
-            权限，此处仅可指定应用创建的文件夹。详情参考[如何为应用开通云文档相关资源的权限](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-add-permissions-to-app)。
-          example:
-            - fldcnqquW1svRIYVT2Np6Iabcef
-        time_zone:
-          $ref: '#/components/schemas/timeZone'
-    timeZone:
+        若应用使用的是 tenant_access_token
+        权限，此处仅可指定应用创建的文件夹。详情参考[如何为应用开通云文档相关资源的权限](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-add-permissions-to-app)。
+      example:
+        - fldcnqquW1svRIYVT2Np6Iabcef
+    TimeZone:
       type: string
       example: Asia/Shanghai
       enum:
